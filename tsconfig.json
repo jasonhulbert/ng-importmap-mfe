@@ -7,6 +7,12 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "mfe-shared": [
+        "projects/mfe-shared/src/lib",
+        "projects/mfe-shared/src/lib/**/*"
+      ]
+    },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
