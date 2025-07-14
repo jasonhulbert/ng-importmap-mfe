@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [],
   template: `
-    <h1>Host App</h1>
-    <router-outlet></router-outlet>
+    <header>
+        <h1>Host App</h1>
+    </header>
+    <main>
+        <div id="mfe-container"></div>
+    </main>
   `,
   styles: ``
 })

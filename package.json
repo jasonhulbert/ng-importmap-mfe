@@ -3,27 +3,34 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --project host-app",
+    "prestart": "npm run build:mfe-app-1 && npm run build:mfe-app-2 && npm run copy-mfe-modules",
+    "build": "npm run build:mfe-shared && npm run build:mfe-app-1 && npm run build:mfe-app-2 && npm run build:host-app",
+    "build:host-app": "ng build --project host-app",
+    "build:mfe-app-1": "ng build --project mfe-app-1",
+    "build:mfe-app-2": "ng build --project mfe-app-2",
+    "build:mfe-shared": "ng build --project mfe-shared",
+    "postbuild": "cp dist/mfe-app-1/browser/main.js dist/host-app/mfe-app-1.js && cp dist/mfe-app-2/browser/main.js dist/host-app/mfe-app-2.js",
+    "copy-mfe-modules": "cp dist/mfe-app-1/browser/main.js projects/host-app/public/mfe-app-1.js && cp dist/mfe-app-2/browser/main.js projects/host-app/public/mfe-app-2.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/compiler": "^19.2.0",
-    "@angular/core": "^19.2.0",
-    "@angular/forms": "^19.2.0",
-    "@angular/platform-browser": "^19.2.0",
-    "@angular/platform-browser-dynamic": "^19.2.0",
-    "@angular/router": "^19.2.0",
+    "@angular/common": "^20.1.0",
+    "@angular/compiler": "^20.1.0",
+    "@angular/core": "^20.1.0",
+    "@angular/forms": "^20.1.0",
+    "@angular/platform-browser": "^20.1.0",
+    "@angular/platform-browser-dynamic": "^20.1.0",
+    "@angular/router": "^20.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.15",
-    "@angular/cli": "^19.2.11",
-    "@angular/compiler-cli": "^19.2.0",
+    "@angular/build": "^20.1.0",
+    "@angular/cli": "^20.1.0",
+    "@angular/compiler-cli": "^20.1.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
@@ -31,7 +38,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^19.2.0",
-    "typescript": "~5.7.2"
+    "ng-packagr": "^20.1.0",
+    "typescript": "~5.8.3"
   }
 }
