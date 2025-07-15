@@ -3,7 +3,9 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { MfeLifecycle } from '@mfe-shared';
 
-let appRef: any = null;
+let _appRef: any = null;
+let _appContainer: HTMLElement | null = null;
+let _rootSelector: string | null = null;
 
 function preloadStylesheet(href: string): Promise<HTMLLinkElement> {
     return new Promise((resolve, reject) => {
@@ -17,22 +19,25 @@ function preloadStylesheet(href: string): Promise<HTMLLinkElement> {
 }
 
 const lifecycle: MfeLifecycle = {
-    async mount(containerId: string, props?: Record<string, unknown>): Promise<void> {
-        const container = document.getElementById(containerId);
+    async mount(containerId: string, rootSelector: string, props?: Record<string, unknown>): Promise<void> {
+        _appContainer = document.getElementById(containerId);
+        _rootSelector = rootSelector;
 
-        if (!container) {
+        if (!_appContainer) {
             throw new Error(`Container with id ${containerId} not found`);
         }
 
-        container.innerHTML = '';
+        _appContainer.innerHTML = '';
 
-        const root = document.createElement('mfe-app-1-root');
+        const root = document.createElement(_rootSelector);
 
-        container.appendChild(root);
+        root.style.visibility = 'hidden';
+
+        _appContainer.appendChild(root);
 
         const link = await preloadStylesheet('/mfe-app-1/styles.css');
 
-        appRef = await bootstrapApplication(AppComponent, appConfig);
+        _appRef = await bootstrapApplication(AppComponent, appConfig);
 
         await new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -43,17 +48,45 @@ const lifecycle: MfeLifecycle = {
         shadowRoot.appendChild(link);
     },
     async unmount(containerId: string): Promise<void> {
-        if (!appRef) {
+        if (!_appRef) {
             console.warn('Application is not mounted, nothing to unmount');
             return;
         }
 
         try {
-            await appRef.destroy();
-            appRef = null;
+            await _appRef.destroy();
+            _appRef = null;
         } catch (e) {
             console.error('Error during unmount:', e);
             throw e;
+        }
+    },
+    show() {
+        if (!_rootSelector) {
+            console.warn('Root selector is not set, cannot show application');
+            return;
+        }
+
+        const root = document.querySelector(_rootSelector) as HTMLElement;
+
+        if (root) {
+            root.style.visibility = 'visible';
+        } else {
+            console.warn('Root element not found, cannot show application');
+        }
+    },
+    hide() {
+        if (!_rootSelector) {
+            console.warn('Root selector is not set, cannot hide application');
+            return;
+        }
+
+        const root = document.querySelector(_rootSelector) as HTMLElement;
+
+        if (root) {
+            root.style.visibility = 'hidden';
+        } else {
+            console.warn('Root element not found, cannot hide application');
         }
     }
 };
