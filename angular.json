@@ -109,9 +109,7 @@
                 "input": "projects/mfe-app-1/public"
               }
             ],
-            "styles": [
-              "projects/mfe-app-1/src/styles.css"
-            ],
+            "styles": ["projects/mfe-app-1/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -193,9 +191,7 @@
                 "input": "projects/mfe-app-2/public"
               }
             ],
-            "styles": [
-              "projects/mfe-app-2/src/styles.css"
-            ],
+            "styles": ["projects/mfe-app-2/src/styles.css"],
             "scripts": []
           },
           "configurations": {
