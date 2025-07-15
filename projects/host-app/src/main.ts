@@ -1,15 +1,24 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { loadMfe } from '@mfe-shared';
+import { loadMfe, MfeLifecycle } from '@mfe-shared';
 
-bootstrapApplication(AppComponent, appConfig)
-  .then(() => {
-    loadMfe('mfe-app-1')
-      .then((mfe) => {
-          mfe.mount('mfe-container', 'mfe-app-1-root', { someProp: 'value' })
-              .then(() => mfe.show?.())
-              .catch(err => console.error('Failed to load mfe:', err))
-      });
-  })
-  .catch((err) => console.error(err));
+(async () => {
+    try {
+        await bootstrapApplication(AppComponent, appConfig);
+    } catch (e) {
+        console.error('Failed to bootstrap application:', e);
+    }
+
+    let mfe: MfeLifecycle = await loadMfe('mfe-app-1');
+
+    if (!mfe) {
+        console.error('Failed to load MFE lifecycle');
+
+        return;
+    }
+
+    await mfe.mount('mfe-container', 'mfe-app-1-root', { someProp: 'value' });
+
+    mfe.show();
+})();
